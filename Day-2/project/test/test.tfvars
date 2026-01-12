@@ -1,3 +1,3 @@
-test_ami               = "ami-0ecb62995f68bb549"
-test_instance_type     = "t2.medium"
-test_instance_name     = "Ubuntu"
+aws_region    = "us-east-1"
+ami           = "ami-0ecb62995f68bb549"
+instance_type = "t2.medium"

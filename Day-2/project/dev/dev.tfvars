@@ -1,3 +1,3 @@
-dev_ami           = "ami-069e612f612be3a2b"
-dev_instance_type = "t2.micro"
-dev_instance_name = "RedHat"
+aws_region    = "us-east-1"
+ami           = "ami-07ff62358b87c7116"
+instance_type = "t2.medium"

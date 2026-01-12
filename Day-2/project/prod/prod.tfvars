@@ -1,3 +1,3 @@
-prod_ami               = "ami-07ff62358b87c7116"
-prod_instance_type     = "t3.small"
-prod_instance_name     = "aws-linux-1"
+aws_region    = "us-east-1"
+ami           = "ami-06777e7ef7441deff"
+instance_type = "t3.small"
