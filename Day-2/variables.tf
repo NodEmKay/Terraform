@@ -1,15 +1,11 @@
-variable "ami" {
-  description = "Ubuntu AMI ID"
-  type        = string
-}
+variable "dev_ami" {}
+variable "dev_instance_type" {}
+variable "dev_instance_name" {}
 
-variable "instance_type" {
-  description = "EC2 instance type"
-  type        = string
-}
-variable "instance_name" {
-  description = "Name tag for the EC2 instance"
-  type        = string
-}
+variable "test_ami" {}
+variable "test_instance_type" {}
+variable "test_instance_name" {}
 
-
+variable "prod_ami" {}
+variable "prod_instance_type" {}
+variable "prod_instance_name" {}

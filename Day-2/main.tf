@@ -1,8 +1,26 @@
-resource "aws_instance" "Ubuntu-Image" {
-  ami           = var.ami
-  instance_type = var.instance_type
+resource "aws_instance" "dev" {
+  ami           = var.dev_ami
+  instance_type = var.dev_instance_type
 
   tags = {
-    Name = var.instance_name
+    Name = "dev-server"
+  }
+}
+
+resource "aws_instance" "test" {
+  ami           = var.test_ami
+  instance_type = var.test_instance_type
+
+  tags = {
+    Name = "test-server"
+  }
+}
+
+resource "aws_instance" "prod" {
+  ami           = var.prod_ami
+  instance_type = var.prod_instance_type
+
+  tags = {
+    Name = "prod-server"
   }
 }
