@@ -1,26 +1,13 @@
-resource "aws_instance" "dev" {
-  ami           = var.dev_ami
-  instance_type = var.dev_instance_type
+resource "aws_instance" "server" {
+  ami                  = var.ami
+  instance_type        = var.instance_type
+  iam_instance_profile = var.iam_instance_profile
 
   tags = {
-    Name = "dev-server"
+    Name = var.instance_name
   }
-}
 
-resource "aws_instance" "test" {
-  ami           = var.test_ami
-  instance_type = var.test_instance_type
-
-  tags = {
-    Name = "test-server"
-  }
-}
-
-resource "aws_instance" "prod" {
-  ami           = var.prod_ami
-  instance_type = var.prod_instance_type
-
-  tags = {
-    Name = "prod-server"
+  lifecycle {
+    prevent_destroy = true
   }
 }
