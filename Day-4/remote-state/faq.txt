@@ -1,0 +1,21 @@
+1.What is a Terraform state file, and why does Terraform need it? 
+2.What’s the difference between keeping the state file locally vs storing it in S3? 
+3.What happens if multiple users try to use the same state file at the same time? 
+4.What are the best practices when a team shares a single Terraform state file? 
+5.What exactly is `backend.tf`, and what does it control? 
+6.When do we need DynamoDB for Terraform, and what problem does it solve? 
+7.What is a state lock file, and why is it important? 
+8.What happens if every user keeps their own state file for the same project? 
+9.Is it a good idea to store the Terraform state file in GitHub? 
+10.What are the pros and cons of keeping the state file locally? 
+11.How do we keep the Terraform state consistent across machines? 
+12.How do you run Terraform from an EC2 instance? 
+13.What IAM role should an EC2 instance have if Terraform’s state is stored in S3? 
+14.When should we run `terraform init -reconfigure`? 
+15.What happens if you copy `backend.tf` into another directory and run `terraform init` there? 
+16.How do you generate an SSH keypair on Windows and copy it to a Linux machine? 
+17.How do you clone a GitHub repo onto an Amazon Linux machine? 
+18.Why do we need to add our machine’s SSH key to GitHub? 
+19.What cloning methods does GitHub support (SSH, HTTPS, etc.)? 
+20.How do you switch a GitHub repository from private to public?
+
