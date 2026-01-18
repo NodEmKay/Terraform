@@ -54,3 +54,13 @@ tags = {
  Name = "${var.instance_name}-5"
 }
 }
+
+resource "aws_instance" "aws_linux-6" {
+ami           = var.ami
+instance_type = var.instance_type
+key_name      = aws_key_pair.aws_linux.key_name
+
+tags = {
+ Name = "${var.instance_name}-6"
+}
+}
