@@ -1,0 +1,9 @@
+In Vscode -> Navigate to C:\Terraform\Day-5\RemoteBackEnd-Dyn-DB
+Configure AWS profile -> aws configure
+Create required files -> backend.tf,main.tf,variable.tf, Terraform.tfvars & provider.tf
+Create S3 bucket -> node-s3-bucket0011"
+Create a Dynamo DB -> Table Name = use_dydb_to_monitor_tasks_and_lock_tf_state_when_required -> Partition key = LockID
+Update the Dynamo DB in main.tf
+Run tf init + tf init validate + tf plan + tf apply -> Verify Terraform.state created in S3 bucket#
+
+

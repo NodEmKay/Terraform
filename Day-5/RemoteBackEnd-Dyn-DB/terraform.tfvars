@@ -1,0 +1,5 @@
+aws_region       = "us-east-1"
+ami              = "ami-07ff62358b87c7116"
+instance_type    = "t3.micro"
+instance_name    = "aws-server1"
+public_key_path  = "~/.ssh/id_ed25519.pub"
