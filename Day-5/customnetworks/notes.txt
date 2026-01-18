@@ -1,0 +1,14 @@
+VPC tag = VPC-PPA
+CIDR Block = 10.0.0.0/16
+Create two Subnets
+    Public = 10.0.1.0/24 - assocaite VPC-PPA
+    Private = 10.0.2.0/24 - assocaite VPC-PPA
+Create Internet Gateway and assocaite to VPC
+
+
+
+
+
+
+
+
