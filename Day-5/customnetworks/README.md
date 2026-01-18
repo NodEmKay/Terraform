@@ -1,11 +1,11 @@
-# **Terraform AWS VPC ‚Äì Infrastructure Deployment**
+# Terraform AWS VPC ‚Äì Infrastructure Deployment
 
 This project provisions a production‚Äëready AWS network environment using Terraform.  
 It includes a VPC, public and private subnets, routing, NAT gateway, security groups, key pairs, and EC2 instances (bastion + private app host).
 
 ---
 
-## **Ì≥å Architecture Overview**
+## Architecture Overview
 
 The infrastructure deployed includes:
 
@@ -24,7 +24,7 @@ The infrastructure deployed includes:
 
 ---
 
-## **Ì≥Å Project Structure**
+##Project Structure
 
 ```
 .
@@ -36,9 +36,9 @@ The infrastructure deployed includes:
 
 ---
 
-## **Ì∫Ä What Terraform Builds**
+##What Terraform Builds
 
-### **Networking**
+###Networking
 - Creates a VPC with public and private subnets.
 - Attaches an Internet Gateway.
 - Allocates an Elastic IP for NAT.
@@ -48,14 +48,14 @@ The infrastructure deployed includes:
   - Private RT ‚Üí NAT Gateway
 - Associates subnets with their respective route tables.
 
-### **Security**
+###Security
 - Creates a security group (`ppa-sg`) allowing:
   - HTTP (80)
   - HTTPS (443)
   - SSH (22)
   - All outbound traffic
 
-### **Compute**
+### Compute
 - **Bastion Host** in public subnet  
   - Uses the generated key pair  
   - Public IP assigned  
@@ -66,12 +66,12 @@ The infrastructure deployed includes:
   - Internet access via NAT  
   - SSH access only through bastion
 
-### **Key Pair**
+### Key Pair
 - Terraform imports your local public key and creates an AWS key pair.
 
 ---
 
-## **Ì∑© Variables**
+##Variables
 
 Defined in `variables.tf`:
 
@@ -83,7 +83,7 @@ Defined in `variables.tf`:
 
 ---
 
-## **Ì≥§ Outputs**
+##  Outputs
 
 After apply, Terraform prints:
 
@@ -98,26 +98,26 @@ These outputs help with SSH access and debugging.
 
 ---
 
-## **Ìª†Ô∏è Deployment Steps**
+## Deployment Steps
 
-### **1. Initialize Terraform**
+### 1. Initialize Terraform
 ```
 terraform init
 ```
 
-### **2. Review the plan**
+### 2. Review the plan
 ```
 terraform plan
 ```
 
-### **3. Apply the configuration**
+### 3. Apply the configuration
 ```
 terraform apply
 ```
 
 ---
 
-## **Ì¥ê Accessing the Private Instance**
+##Accessing the Private Instance
 
 1. SSH into the bastion host:
 ```
