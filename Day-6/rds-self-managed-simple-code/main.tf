@@ -1,13 +1,13 @@
-# 1. Create a Security Group for the DB
+# 1. Create a Security Group for MySQL
 resource "aws_security_group" "rds_sg" {
-  name        = "rds-security-group"
-  description = "Allow inbound traffic to RDS"
+  name        = "rds-mysql-sg"
+  description = "Allow inbound traffic to MySQL"
 
   ingress {
-    from_port   = 5432
-    to_port     = 5432
+    from_port   = 3306
+    to_port     = 3306
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # Narrow this down for production!
+    cidr_blocks = ["0.0.0.0/0"] 
   }
 
   egress {
@@ -18,18 +18,18 @@ resource "aws_security_group" "rds_sg" {
   }
 }
 
-# 2. Define the RDS Instance
+# 2. Define the MySQL RDS Instance
 resource "aws_db_instance" "default" {
   allocated_storage      = 20
   db_name                = "mydb"
-  engine                 = "postgres"
-  engine_version         = "15.4"
+  engine                 = "mysql"
+  engine_version         = "8.0.43"
   instance_class         = "db.t3.micro"
   username               = var.db_username
   password               = var.db_password
-  parameter_group_name   = "default.postgres15"
+  parameter_group_name   = "default.mysql8.0"
   skip_final_snapshot    = true
   vpc_security_group_ids = [aws_security_group.rds_sg.id]
-  maintenance_window = "sun:04:00-sun:05:00"  # Maintenance every Sunday (UTC)
-  deletion_protection = true
+  maintenance_window     = "sun:04:00-sun:05:00"
+  deletion_protection    = true
 }
