@@ -1,8 +1,8 @@
 provider "aws" {
-  region = "us-east-1" # Make sure this is where you want to work
+  region = "us-east-1"
 }
 
-# --- AUTOMATIC AMI LOOKUP (Fixes the EC2 Error) ---
+# 1. Automatic AMI Lookup
 data "aws_ami" "amazon_linux_2" {
   most_recent = true
   owners      = ["amazon"]
@@ -13,14 +13,15 @@ data "aws_ami" "amazon_linux_2" {
   }
 }
 
-# 1. Create 3 EC2 Instances
+# 2. Create 3 EC2 Instances with Deletion Protection
 resource "aws_instance" "app_server" {
   count         = 3
-  ami           = data.aws_ami.amazon_linux_2.id # Uses the lookup result
+  ami           = data.aws_ami.amazon_linux_2.id
   instance_type = "t2.micro"
 
   root_block_device {
-    delete_on_termination = false
+    # Keeps volume alive so Lambda has time to snapshot it
+    delete_on_termination = false 
   }
 
   tags = {
@@ -32,13 +33,7 @@ resource "aws_instance" "app_server" {
   }
 }
 
-# 2. S3 Bucket (Fixes the S3 Deletion Error)
-resource "aws_s3_bucket" "learning_bucket" {
-  bucket        = "my-lambda-learning-bucket2"
-  force_destroy = true # <--- This allows deleting even if files exist
-}
-
-# 3. IAM Role & Policy for Lambda
+# 3. IAM Role & Updated Policy (Fixed Permission)
 resource "aws_iam_role" "snapshot_role" {
   name = "ec2_termination_snapshot_role"
 
@@ -58,12 +53,21 @@ resource "aws_iam_role_policy" "snapshot_permissions" {
     Version = "2012-10-17"
     Statement = [
       {
-        Action   = ["ec2:DescribeVolumes", "ec2:CreateSnapshot", "ec2:DescribeInstances"]
+        Action = [
+          "ec2:DescribeVolumes",
+          "ec2:CreateSnapshot",
+          "ec2:DescribeInstances",
+          "ec2:CreateTags" # <--- FIXED: Allows tagging during creation
+        ]
         Effect   = "Allow"
         Resource = "*"
       },
       {
-        Action   = ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"]
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
         Effect   = "Allow"
         Resource = "*"
       }
@@ -71,7 +75,7 @@ resource "aws_iam_role_policy" "snapshot_permissions" {
   })
 }
 
-# 4. Lambda Function
+# 4. Lambda Function with Increased Timeout
 data "archive_file" "lambda_zip" {
   type        = "zip"
   source_file = "lambda_function.py"
@@ -84,10 +88,11 @@ resource "aws_lambda_function" "snapshot_lambda" {
   role             = aws_iam_role.snapshot_role.arn
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.9"
+  timeout          = 15 # Increased to give API calls more time
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 }
 
-# 5. EventBridge Trigger
+# 5. EventBridge Rule & Target
 resource "aws_cloudwatch_event_rule" "ec2_shutdown_rule" {
   name = "watch-ec2-shutting-down"
   event_pattern = jsonencode({
@@ -99,10 +104,9 @@ resource "aws_cloudwatch_event_rule" "ec2_shutdown_rule" {
 
 resource "aws_cloudwatch_event_target" "lambda_target" {
   rule      = aws_cloudwatch_event_rule.ec2_shutdown_rule.name
-  target_id = "TriggerLambda" # Explicitly naming it fixes the "Empty Result" error
+  target_id = "TriggerLambda"
   arn       = aws_lambda_function.snapshot_lambda.arn
 
-  # This ensures the permission exists BEFORE the target tries to connect
   depends_on = [aws_lambda_permission.allow_eventbridge]
 }
 
@@ -111,4 +115,10 @@ resource "aws_lambda_permission" "allow_eventbridge" {
   function_name = aws_lambda_function.snapshot_lambda.function_name
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.ec2_shutdown_rule.arn
+}
+
+# 6. Optional: S3 Bucket
+resource "aws_s3_bucket" "learning_bucket" {
+  bucket        = "my-lambda-learning-bucket2"
+  force_destroy = true
 }
