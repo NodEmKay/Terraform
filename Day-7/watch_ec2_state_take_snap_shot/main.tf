@@ -1,8 +1,29 @@
 provider "aws" {
-  region = "us-east-1" 
+  region = "us-east-1"
 }
 
-# 1. IAM Role for Lambda
+# 1. Create 3 EC2 Instances
+resource "aws_instance" "app_server" {
+  count         = 3
+  ami           = "ami-0c55b159cbfafe1f0" # Update this to a valid AMI in your region
+  instance_type = "t2.micro"
+
+  # Ensure volumes are NOT deleted by AWS hardware instantly
+  root_block_device {
+    delete_on_termination = false
+  }
+
+  tags = {
+    Name = "Project-Server-${count.index + 1}"
+  }
+
+  # SAFETY LOCK: Terraform will refuse to delete these instances
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
+# 2. IAM Role & Policy for Lambda
 resource "aws_iam_role" "snapshot_role" {
   name = "ec2_termination_snapshot_role"
 
@@ -16,83 +37,60 @@ resource "aws_iam_role" "snapshot_role" {
   })
 }
 
-# 2. Permissions: Snapshot + CloudWatch Logs
-resource "aws_iam_policy" "snapshot_policy" {
-  name = "EC2SnapshotPermissions"
+resource "aws_iam_role_policy" "snapshot_permissions" {
+  role = aws_iam_role.snapshot_role.id
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
-        Action = [
-          "ec2:DescribeVolumes",
-          "ec2:CreateSnapshot",
-          "ec2:DescribeInstances"
-        ]
+        Action   = ["ec2:DescribeVolumes", "ec2:CreateSnapshot"]
         Effect   = "Allow"
         Resource = "*"
       },
       {
-        Action = [
-          "logs:CreateLogGroup",
-          "logs:CreateLogStream",
-          "logs:PutLogEvents"
-        ]
+        Action   = ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"]
         Effect   = "Allow"
-        Resource = "arn:aws:logs:*:*:*"
+        Resource = "*"
       }
     ]
   })
 }
 
-resource "aws_iam_role_policy_attachment" "attach_policy" {
-  role       = aws_iam_role.snapshot_role.name
-  policy_arn = aws_iam_policy.snapshot_policy.arn
-}
-
-# 3. Zip the code (assumes lambda_function.py is in the same folder)
+# 3. Lambda Function
 data "archive_file" "lambda_zip" {
   type        = "zip"
   source_file = "lambda_function.py"
-  output_path = "snapshot_lambda_payload.zip"
+  output_path = "lambda_payload.zip"
 }
 
-# 4. The Lambda Function
 resource "aws_lambda_function" "snapshot_lambda" {
   filename      = data.archive_file.lambda_zip.output_path
   function_name = "ec2-termination-snapshotter"
   role          = aws_iam_role.snapshot_role.arn
   handler       = "lambda_function.lambda_handler"
   runtime       = "python3.9"
-
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 }
 
-# 5. EventBridge Rule: Watch for 'shutting-down'
-resource "aws_cloudwatch_event_rule" "ec2_shutting_down_rule" {
+# 4. EventBridge Trigger (Watching 'shutting-down')
+resource "aws_cloudwatch_event_rule" "ec2_shutdown_rule" {
   name        = "watch-ec2-shutting-down"
-  description = "Capture EC2 instances as they begin to shut down"
-
   event_pattern = jsonencode({
     "source": ["aws.ec2"],
     "detail-type": ["EC2 Instance State-change Notification"],
-    "detail": {
-      "state": ["shutting-down"]
-    }
+    "detail": { "state": ["shutting-down"] }
   })
 }
 
-# 6. Target: Point the Rule to the Lambda
-resource "aws_cloudwatch_event_target" "target_lambda" {
-  rule      = aws_cloudwatch_event_rule.ec2_shutting_down_rule.name
-  target_id = "TriggerSnapshotLambda"
+resource "aws_cloudwatch_event_target" "sns" {
+  rule      = aws_cloudwatch_event_rule.ec2_shutdown_rule.name
+  target_id = "TriggerLambda"
   arn       = aws_lambda_function.snapshot_lambda.arn
 }
 
-# 7. Permission: Allow EventBridge to talk to Lambda
 resource "aws_lambda_permission" "allow_eventbridge" {
-  statement_id  = "AllowExecutionFromEventBridge"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.snapshot_lambda.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.ec2_shutting_down_rule.arn
+  source_arn    = aws_cloudwatch_event_rule.ec2_shutdown_rule.arn
 }
