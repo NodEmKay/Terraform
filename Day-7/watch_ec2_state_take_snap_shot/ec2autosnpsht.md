@@ -22,7 +22,7 @@ This project automates data protection for AWS EC2 instances. Using **Event-Driv
 .
 ├── main.tf              # Terraform infrastructure (EC2, Lambda, EventBridge, IAM)
 ├── lambda_function.py   # Python logic for snapshot creation
-└── README.md            # Documentation
+└── ec2autosnpsht.md            # Documentation
 
 ```
 
