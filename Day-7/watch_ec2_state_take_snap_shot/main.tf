@@ -99,8 +99,11 @@ resource "aws_cloudwatch_event_rule" "ec2_shutdown_rule" {
 
 resource "aws_cloudwatch_event_target" "lambda_target" {
   rule      = aws_cloudwatch_event_rule.ec2_shutdown_rule.name
-  target_id = "TriggerLambda"
+  target_id = "TriggerLambda" # Explicitly naming it fixes the "Empty Result" error
   arn       = aws_lambda_function.snapshot_lambda.arn
+
+  # This ensures the permission exists BEFORE the target tries to connect
+  depends_on = [aws_lambda_permission.allow_eventbridge]
 }
 
 resource "aws_lambda_permission" "allow_eventbridge" {
