@@ -41,7 +41,7 @@ resource "aws_security_group" "allow_ssh" {
 
 # 4. Create the EC2 Instance
 resource "aws_instance" "my_server" {
-  ami           = "ami-0ebfd141b224c8c72" # Amazon Linux 2023 in us-east-1
+  ami           = "ami-07ff62358b87c7116" # Amazon Linux 2023 in us-east-1
   instance_type = "t2.micro"
 
   # Placement in the custom network
