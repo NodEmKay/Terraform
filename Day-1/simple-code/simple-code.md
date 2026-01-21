@@ -29,6 +29,9 @@ Before deploying, ensure you have:
   ```
 
 Terraform will upload the **public key** (`mykey.pub`) to AWS.
+- # Remote Backend
+    An S3 bucket # "node- emkaye01" - to stores the state file () - What exists right now
+    An Dynamo DB Table # "use_dydb_state_file" to stores the state lock - Prevent two people from changing infra at the same time
 
 ---
 
