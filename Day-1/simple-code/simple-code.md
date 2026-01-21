@@ -40,7 +40,7 @@ Terraform will upload the **public key** (`mykey.pub`) to AWS.
 ```
 .
 ├── main.tf
-└── README.md
+└── simple-read.md
 ```
 
 ---
