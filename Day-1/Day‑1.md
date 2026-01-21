@@ -126,7 +126,7 @@ terraform state list
 ├── main.tf
 ├── variables.tf
 ├── outputs.tf
-└── README.md
+└── Day-1.md
 ```
 
 ---
