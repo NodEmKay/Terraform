@@ -3,7 +3,7 @@
 # -------------------------
 resource "aws_key_pair" "web" {
   key_name   = "mykey"
-  public_key = file("~/.ssh/mykey.pub")
+  public_key = file("~/.ssh/id_ed25519.pub")
 }
 
 # -------------------------
