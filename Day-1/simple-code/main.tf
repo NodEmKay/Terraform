@@ -1,7 +1,7 @@
 # -------------------------
 # SSH Key Pair
 # -------------------------
-resource "aws_key_pair" "generated" {
+resource "aws_key_pair" "web" {
   key_name   = "mykey"
   public_key = file("~/.ssh/mykey.pub")
 }
@@ -75,11 +75,11 @@ resource "aws_security_group" "ssh" {
 # EC2 Instance
 # -------------------------
 resource "aws_instance" "web" {
-  ami           = "ami-0c02fb55956c7d316" # Ubuntu 22.04
+  ami           = "ami-0b6c6ebed2801a5cb" # Ubuntu 22.04
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.public.id
 
   vpc_security_group_ids = [aws_security_group.ssh.id]
 
-  key_name = aws_key_pair.generated.key_name
+  key_name = aws_key_pair.web.key_name
 }
