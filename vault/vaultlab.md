@@ -1,9 +1,4 @@
-Absolutely, Muthupandi — here is the **complete end‑to‑end guide** in clean, professional **README.md** format.  
-You can copy this directly into your GitHub repo or project folder.
-
----
-
-#**Vault + Terraform + AWS RDS — Full End‑to‑End Setup**
+*Vault + Terraform + AWS RDS — Full End‑to‑End Setup**
 
 This guide walks through building a Vault server on AWS EC2, configuring S3 storage, unsealing Vault, connecting from your local machine, and using Terraform to create an AWS RDS instance using secrets stored in Vault.
 
