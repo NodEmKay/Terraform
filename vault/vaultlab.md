@@ -3,13 +3,13 @@ You can copy this directly into your GitHub repo or project folder.
 
 ---
 
-# í³˜ **Vault + Terraform + AWS RDS â€” Full Endâ€‘toâ€‘End Setup**
+#**Vault + Terraform + AWS RDS â€” Full Endâ€‘toâ€‘End Setup**
 
 This guide walks through building a Vault server on AWS EC2, configuring S3 storage, unsealing Vault, connecting from your local machine, and using Terraform to create an AWS RDS instance using secrets stored in Vault.
 
 ---
 
-## í¿¦ **1. Deploy Vault on EC2**
+## **1. Deploy Vault on EC2**
 
 ### **Launch EC2 Instance**
 - Ubuntu 22.04 or 24.04  
@@ -50,7 +50,7 @@ sudo systemctl status vault
 
 ---
 
-## í¿¦ **2. Attach IAM Role to EC2**
+## **2. Attach IAM Role to EC2**
 
 ### **Create IAM Role**
 - Trusted entity: **EC2**
@@ -71,7 +71,7 @@ curl -H "X-aws-ec2-metadata-token: $TOKEN" \
 
 ---
 
-## í¿¦ **3. Initialize & Unseal Vault**
+## **3. Initialize & Unseal Vault**
 
 ### **Initialize**
 ```bash
@@ -96,7 +96,7 @@ vault login
 
 ---
 
-## í¿¦ **4. Create Secrets in Vault**
+## **4. Create Secrets in Vault**
 
 ### **Enable KV Engine**
 ```bash
@@ -110,7 +110,7 @@ vault kv put secret/app/config username="admin" password="SuperSecret123"
 
 ---
 
-## í¿¦ **5. Connect From Local Machine (Windows + Git Bash)**
+## **5. Connect From Local Machine (Windows + Git Bash)**
 
 ### **Install Vault CLI**
 Download Vault for Windows â†’ extract â†’ place `vault.exe` in:
@@ -134,7 +134,7 @@ vault status
 
 ---
 
-## í¿¦ **6. Terraform Setup**
+## **6. Terraform Setup**
 
 ### **Project Structure**
 ```
@@ -193,7 +193,7 @@ output "password" {
 
 ---
 
-## í¿¦ **7. Run Terraform**
+## **7. Run Terraform**
 
 ```bash
 terraform init
@@ -216,7 +216,7 @@ password = <sensitive>
 
 ---
 
-## í¾‰ **You Now Have a Full Vault â†’ Terraform â†’ AWS Workflow**
+## **You Now Have a Full Vault â†’ Terraform â†’ AWS Workflow**
 
 This setup gives you:
 
