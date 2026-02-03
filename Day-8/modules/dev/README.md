@@ -1,15 +1,16 @@
-Simple EC2 example
+## Dev Environment - EC2 Instance
 
-Usage:
+This directory deploys a dev EC2 instance using the shared ec2-instance module.
 
+### Usage
 ```bash
 cd Day-8/modules/dev
 terraform init
-terraform plan -out plan.tfplan
-terraform apply "plan.tfplan"
+terraform plan
+terraform apply
 ```
 
-Notes:
-- By default the configuration will lookup the latest Amazon Linux 2 AMI in the selected region.
-- Provide `-var 'key_name=your-key'` to attach an existing key pair.
-- Provide `-var 'ami=ami-xxxx'` to override the AMI lookup.
+### Notes
+- Variables are set in variables.tf for dev-specific values (AMI, type, tags).
+- The ec2-instance module provisions the instance and outputs instance_id, public_ip, and public_dns.
+- To change the AMI, update the ami_id variable in variables.tf.

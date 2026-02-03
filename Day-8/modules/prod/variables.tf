@@ -1,7 +1,7 @@
 variable "ami_id" {
   description = "AMI ID to use for the instance"
   type        = string
-  default     = ""
+  default     = "ami-0532be01f26a3de55"
 }
 
 variable "type" {
@@ -21,5 +21,6 @@ variable "tags" {
   type        = map(string)
   default     = {
     Environment = "prod"
+    Name        = "prod-server"
   }
 }

@@ -1,7 +1,7 @@
-resource "aws_instance" "example" {
-  ami           = var.ami_id
-  instance_type = var.type
-  key_name      = var.key_name != "" ? var.key_name : null
-
-  tags = var.tags
+module "ec2_instance" {
+  source      = "../ec2-instance"
+  ami_id      = var.ami_id
+  type        = var.type
+  key_name    = var.key_name
+  tags        = var.tags
 }
