@@ -24,7 +24,7 @@ resource "aws_instance" "provisioner_example" {
   provisioner "remote-exec" {
     inline = [
       "sudo yum update -y",
-      "echo 'Hello from Terraform provisioner!' > /tmp/terraform-provisioner.txt"
+      "echo 'welcome-buddy!' > /tmp/terraform-provisioner.txt"
     ]
   }
   connection {
@@ -36,5 +36,15 @@ resource "aws_instance" "provisioner_example" {
 
   tags = {
     Name = "ProvisionerPractice"
+  }
+}
+
+resource "null_resource" "track_echo_change" {
+  triggers = {
+    always_run = timestamp()
+  }
+
+  provisioner "local-exec" {
+    command = "echo The current timestamp is $(date) > echo-change-tracked.txt"
   }
 }
