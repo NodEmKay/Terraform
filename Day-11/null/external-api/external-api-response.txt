@@ -1,0 +1,19 @@
+{
+  "args": {}, 
+  "data": "", 
+  "files": {}, 
+  "form": {
+    "'{\"event\":\"terraform_apply\"}'": ""
+  }, 
+  "headers": {
+    "Accept": "*/*", 
+    "Content-Length": "29", 
+    "Content-Type": "application/x-www-form-urlencoded", 
+    "Host": "httpbin.org", 
+    "User-Agent": "curl/8.17.0", 
+    "X-Amzn-Trace-Id": "Root=1-6986fa03-052564e450ed2420340d4505"
+  }, 
+  "json": null, 
+  "origin": "51.37.187.33", 
+  "url": "https://httpbin.org/post"
+}
