@@ -1,0 +1,8 @@
+aws_region        = "us-east-1"
+db_name           = "remoteexe"
+db_username       = "admin"
+db_password       = "ChangeMe123!"
+ec2_ami           = "ami-0c02fb55956c7d316"
+ec2_instance_type = "t3.micro"
+key_name          = "key101"
+private_key_path  = "C:/Users/muthu/.ssh/key101.pem"
