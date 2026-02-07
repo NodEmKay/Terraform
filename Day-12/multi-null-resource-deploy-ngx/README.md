@@ -40,6 +40,18 @@ This example demonstrates how to deploy an Nginx web server on an AWS EC2 instan
 - Add more null_resources for additional automation or practice
 - Adjust instance type, region, or security group rules as needed
 
+## Important Note
+
+> **⚠️ IMPORTANT:**
+> 
+> **This code uses `triggers = { always_run = timestamp() }` in all `null_resource` blocks.**
+> 
+> Every time you run `terraform apply`, the `null_resource`s will be destroyed and recreated, and their provisioners will run again—even if nothing else has changed.
+> 
+> This is useful for repeated automation and practice, but may not be suitable for production use.
+> 
+> To run provisioners only when something else changes, remove the `always_run = timestamp()` trigger.
+
 ## Clean Up
 To destroy all resources:
 ```
