@@ -33,6 +33,16 @@ This example creates a MySQL RDS instance with public access and uses a local-ex
    - The RDS instance will be created and initialized with the SQL script.
    - The RDS endpoint will be shown in the output.
 
+## Important Note
+
+> ⚠️ **IMPORTANT:**
+>
+> This code uses `triggers = { always_run = timestamp() }` in all `null_resource` blocks.
+>
+> Every time you run `terraform apply`, the `null_resource`s will be destroyed and recreated, even if nothing else has changed.
+>
+> This is useful for repeated automation and practice, but may not be suitable for production use. To run provisioners only when something else changes, remove the `always_run = timestamp()` trigger.
+
 ## Verification Steps
 1. **Get the RDS endpoint from Terraform output.**
 2. **Connect to the RDS instance using the MySQL client:**

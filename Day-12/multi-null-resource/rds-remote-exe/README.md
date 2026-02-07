@@ -22,13 +22,15 @@ This example creates a MySQL RDS instance and an EC2 instance. The EC2 instance 
 4. Wait for Terraform to finish. The EC2 instance will initialize the RDS database.
 5. Use the EC2 public IP (output) to SSH and verify, or connect to RDS as before.
 
-## Important Note About Instance Recreation
+## Important Note
 
-> **Terraform may destroy and recreate the EC2 instance on each apply if:**
+> ⚠️ **IMPORTANT:**
+>
+> Terraform may destroy and recreate the EC2 instance on each apply if:
 > - You change immutable arguments (AMI, instance_type, key_name, etc.)
-> - Provisioners use triggers that always change (e.g., timestamp() or file hashes)
+> - Provisioners use triggers that always change (e.g., `timestamp()` or file hashes)
 > - The resource depends on other resources that are replaced
-> - The SSH key or private_key_path changes
+> - The SSH key or `private_key_path` changes
 >
 > **To avoid unnecessary recreation:**
 > - Do not use always-changing triggers in provisioners
