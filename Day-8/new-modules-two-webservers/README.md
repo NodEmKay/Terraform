@@ -107,4 +107,3 @@ terraform destroy -var-file=terraform.tfvars
       - If index.html is not updated, check /var/log/cloud-init.log and /var/log/user-data.log on the instance.
 
 ---
-
