@@ -4,7 +4,7 @@ resource "aws_db_instance" "this" {
   engine               = var.engine
   instance_class       = var.instance_class
   identifier           = "rds-${var.tags["Environment"]}"
-  db_name              = "${var.db_name}_${var.tags["Environment"]}"
+  db_name              = var.db_name
   username             = var.username
   password             = var.password
   skip_final_snapshot  = true

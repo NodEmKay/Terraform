@@ -80,6 +80,8 @@ Day-13/
 
 ---
 
+tags = { Environment = "test", ManagedBy = "Terraform" }
+
 ## 📝 Example tfvars (test.tfvars)
 
 ```hcl
@@ -87,6 +89,13 @@ vpc_cidr = "10.10.0.0/16"
 subnet_cidrs = ["10.10.1.0/24", "10.10.2.0/24"]
 availability_zones = ["us-east-1a", "us-east-1b"]
 tags = { Environment = "test", ManagedBy = "Terraform" }
+## 📝 Example tfvars (per environment)
+
+```hcl
+# us-east-1 example
+ami = "ami-0532be01f26a3de55" # Use a valid AMI for us-east-1
+# us-west-2 example
+# ami = "ami-055a9df0c8c9f681c" # Use a valid AMI for us-west-2
 
 ami = "ami-0532be01f26a3de55"
 instance_type = "t3.micro"
@@ -94,12 +103,17 @@ instance_type = "t3.micro"
 allocated_storage = 20
 engine = "mysql"
 instance_class = "db.t3.micro"
-db_name = "testdb"
+# db_name must start with a letter and contain only alphanumeric characters (no dashes, underscores, or spaces)
+db_name = "testdb1"
 username = "testuser"
 password = "testpass123"
 
 bucket_name = "my-test-bucket-2026"
+
+> **Note:** Always use a region-appropriate AMI for each environment. The RDS module uses only the value of `db_name` as provided. Ensure your value is valid for AWS RDS: it must start with a letter and contain only letters and numbers.
 ```
+
+> **Note:** The RDS module now uses only the value of `db_name` as provided. Ensure your value is valid for AWS RDS: it must start with a letter and contain only letters and numbers.
 
 ---
 
