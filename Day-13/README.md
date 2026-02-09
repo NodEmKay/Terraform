@@ -133,11 +133,17 @@ bucket_name = "my-test-bucket-2026"
 
 ---
 
-## 💡 Tips
 
-- Use remote state (S3 + DynamoDB) for team collaboration.
-- Use workspaces for even finer environment separation if needed.
-- Always review the plan before applying changes.
+## 🧹 Destroying All Resources
+
+To destroy resources for each environment, run the following in each environment directory:
+
+```bash
+cd Day-13/environments/env-prod   # or env-test, env-us-east-1, etc.
+terraform destroy -var-file=prod.tfvars   # or test.tfvars, us-east-1.tfvars, etc.
+```
+
+Repeat for each environment to clean up all resources managed by Terraform.
 
 ---
 
