@@ -52,4 +52,3 @@ web-servers-using-modules/
 
 ---
 This project is a simple, modular example for learning or starting real AWS infrastructure with Terraform.
-## What This Deploys
